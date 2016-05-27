@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<meta lang="pt-BR">
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Look At Me</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="lib/ionic/css/ionic.css">
+	<link rel="stylesheet" href="css/style.css">
+	<script src="lib/ionic/js/ionic.bundle.js"></script>
+	<script src="js/ng-cordova.min.js"></script>
+	<script src="cordova.js"></script>
+	<script src="js/app.js"></script>
+	<script src="js/routes.js"></script>
+	<script src="js/controllers.js"></script>
+	<script src="lib/ment.io/dist/mentio.min.js"></script>
+	<script src="lib/ng-img-crop/compile/minified/ng-img-crop.js"></script>
+	<script src="services/dateConverter.js"></script>
+	<script src="controllers/module.js"></script>
+	<script src="controllers/sideMenuController.js"></script>
+	<script src="controllers/questionController.js"></script>
+	<script src="controllers/itemController.js"></script>
+	<script>
+		if (!localStorage.getItem("loggedUser")) {
+			window.location.href = "/";
+		}
+	</script> 
+</head>
+<body ng-app="LookAtMe" ng-controller="SideMenuController" ng-cloak>
+	<ion-side-menus>
+		<!-- Left menu -->
+		<div ng-include="'partials/sideMenu.html'"></div>
+		<!-- Main content -->
+		<ion-side-menu-content ng-controller="QuestionController">
+			<ion-view>
+				<!-- Navbar -->
+				<ion-header-bar class="bar-positive item-input-inset">
+					<button class="button button-icon icon ion-navicon" menu-toggle="left"></button>
+					<h1 class="title"><span ng-hide="error">Pergunta de {{question.user_login}}</span><span ng-show="error">Ooopss...</span></h1>
+				</ion-header-bar>
+				<!-- Questions -->
+				<ion-content>
+					<div class="container" ng-show="error">
+						<p class="alert alert-danger">Pergunta não encontrada.</p>
+					</div>
+					<div ng-show="!error" class="list card">
+						<div class="item item-avatar" href="#">
+							<img ng-src="/api/users/{{question.user_login}}/photo" onError="this.src='img/avatar.jpeg';" />
+							<a ng-href="/profile.html?user={{question.user_login}}"><h2>{{question.user_login}}</h2></a>
+							<p><i class="ion-clock"></i> {{question.date}}</p>
+						</div>
+						<div class="item item-body">
+							<h2>{{question.title}}</h2>
+							<p>{{question.description}}</p>
+							<div class="center" style="margin: 0px auto 0px auto; text-align: center;" ng-if="question.type == 'pool'">
+								<ion-radio
+										   ng-repeat="item in question.wardrobe_items"
+										   ng-value="item.item._id"
+										   ng-model="voted._id"
+										   ng-change="vote(item)">
+									<img class="img-circle img-profile" ng-src="/api/items/{{item.item._id}}/photo" onError="this.src='img/shirt.png';" style="width: 150px; height: 150px;" />
+									<br><i class="icon ion-heart w3-large center"> </i>{{(item.likes).length}}
+								</ion-radio>
+							</div>
+							<div ng-if="question.type != 'pool'">
+								<a ng-href="#{{item.item._id}}" ng-click="openItemModal(item.item)" ng-repeat="item in question.wardrobe_items"><img class="img-thumbnail thumbnail-small" ng-src="/api/items/{{item.item._id}}/photo" onError="this.src='img/shirt.png';" title="{{item.item.name}}" /></a>
+							</div>
+							<p ng-show="question.user_login == user.login"><button class="icon-left ion-arrow-graph-up-right button button-energized" ng-click="promoteQuestion()">Promover</button></p>
+						</div>
+						<div class="item item-divider">
+							<p>
+								<a href="#comments"><span class="ion-chatbox active"></span> {{question.comments.length}} comentários</a>
+								<span class="pull-right">
+									<a href="#" ng-repeat="channel in question.channels"><span class="">#{{channel}}</span> </a> 
+								</span>
+							</p>
+						</div>
+						<div class="list" id="comments"> 
+						    <div ng-class="{'favorite-active': comment.is_favorite}" class="item item-avatar item-icon-right" ng-repeat="comment in question.comments | orderBy: '-(upvotes.length - downvotes.length)' ">
+								<img class="col-10" src="/api/users/{{comment.user_id.login}}/photo" onError="this.src='img/avatar.jpeg';">
+								<a ng-href="/profile.html?user={{comment.user_id.login}}"><h2>{{comment.user_id.name || comment.user_id.login}}</h2></a>
+								<p><i class="ion-clock"></i> {{comment.date}}</p>
+								<div class="item-text-wrap col-70">
+									<p>{{comment.comment}}</p>
+								</div>
+								<div class="icon col-20">
+									<p>Rep: {{comment.user_id.reputation}}&nbsp;&nbsp;&nbsp;&nbsp;</p>
+				                    <button class="button button-small button-clear" ng-class="{ 'button-balanced': contains(comment.upvotes, user._id) }" ng-click="upvote(comment)">
+				                        <i class="icon ion-chevron-up"></i> {{comment.upvotes.length}} 
+				                    </button>
+				                    <button class="button button-small button-clear" ng-class="{ 'button-assertive': contains(comment.downvotes, user._id) }" ng-click="downvote(comment)">
+				                        <i class="icon ion-chevron-down"></i> {{comment.downvotes.length}} 
+				                    </button>
+				                    <button class="button button-small button-clear"  ng-show="question.user_login == user.login && !contains_favorite(question.comments)" ng-click="favorite(comment);">
+				                    	<i class="icon ion-android-star-outline"></i> 
+			                    	</button>
+				                </div>
+						    </div>
+							<p class="alert alert-danger" ng-show="errorComment">Erro ao enviar comentário.</p>
+							<div class="item item-input-inset" ng-hide="hasCommented">
+								<label class="item-input-wrapper">
+									<input type="text" id="comment" placeholder="Novo Comentário..." ng-model="comment">
+								</label>
+								<button class="button button-small" ng-click="addComment(comment)">Enviar</button>
+							</div>
+						</div>
+					</div>
+				</ion-content>
+			</ion-view>
+		</ion-side-menu-content>
+	</ion-side-menus> 		
+	<script src="lib/bootstrap/js/jquery.js"></script>
+	<script src="lib/bootstrap/js/bootstrap.js"></script>
+	<script src="services/fileUpload.js"></script>
+	<script src="https://angular-file-upload.appspot.com/js/ng-file-upload-shim.js"></script>
+	<script src="https://angular-file-upload.appspot.com/js/ng-file-upload.js"></script>
+</body>
+</html>

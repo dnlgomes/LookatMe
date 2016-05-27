@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<meta lang="pt-BR">
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Look At Me</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.css">
+		<link rel="stylesheet" href="lib/ionic/css/ionic.css">
+		<link rel="stylesheet" href="css/style.css">
+		<script src="lib/ionic/js/ionic.bundle.js"></script>
+		<script src="js/app.js"></script>
+		<script src="js/routes.js"></script>
+		<script src="js/controllers.js"></script>
+		<script src="controllers/sideMenuController.js"></script>
+		<script src="controllers/wardrobeController.js"></script>
+		<script src="cordova.js"></script>
+		<script>
+		if (!localStorage.getItem("loggedUser")) {
+			window.location.href = "/";
+		}
+		</script>
+	</head>
+	<body ng-app="starter">
+		<ion-side-menus>
+			<!-- Left menu -->
+			<div ng-include="'partials/sideMenu.html'"></div>
+			<!-- Main content -->
+			<ion-side-menu-content ng-controller="WardrobeController">
+				<ion-view>
+					<!-- Navbar -->
+					<ion-header-bar class="bar-positive item-input-inset">
+						<button class="button button-icon icon ion-navicon" menu-toggle="left"></button>
+						<h1 class="title">Look At Me</h1>
+						<button class="button button-balanced" ng-click="openModal()">Adicionar item</button>
+					</ion-header-bar>
+					<!-- Content -->
+					<ion-content class="has-subheader">
+						<div class="row">
+							<div class="col thumbnail text-center">
+								<h3>Camisa verde</h3>
+								<img src="http://www.palaciodotransfer.com.br/media/catalog/product/cache/1/image/840x668/17f82f742ffe127f42dca9de82fb58b1/v/e/verde_lim_o.jpg" />
+								<p>Blablablabla</p>
+								<p><a href="#" class="badge">#Geral</a> <a href="#" class="badge">#HappyHour</a></p>
+								<div class="item item-divider">
+									<p><a href="#">10 curtidas</a> <a href="#">8 comentários</a></p>
+								</div>
+								<div class="item item-divider">
+									<button class="button button-small button-clear icon ion-thumbsup"> Curtir</button>
+									<button class="button button-small button-clear icon ion-chatbox"> Comentar</button>
+								</div>
+							</div>
+							<div class="col thumbnail text-center">
+								<h3>Camisa verde</h3>
+								<img src="http://www.palaciodotransfer.com.br/media/catalog/product/cache/1/image/840x668/17f82f742ffe127f42dca9de82fb58b1/v/e/verde_lim_o.jpg" />
+								<p>Blablablabla</p>
+								<p><a href="#" class="badge">#Geral</a> <a href="#" class="badge">#HappyHour</a></p>
+								<div class="item item-divider">
+									<p><a href="#">10 curtidas</a> <a href="#">8 comentários</a></p>
+								</div>
+								<div class="item item-divider">
+									<button class="button button-small button-clear icon ion-thumbsup"> Curtir</button>
+									<button class="button button-small button-clear icon ion-chatbox"> Comentar</button>
+								</div>
+							</div>
+							<div class="col thumbnail text-center">
+								<h3>Camisa verde</h3>
+								<img src="http://www.palaciodotransfer.com.br/media/catalog/product/cache/1/image/840x668/17f82f742ffe127f42dca9de82fb58b1/v/e/verde_lim_o.jpg" />
+								<p>Blablablabla</p>
+								<p><a href="#" class="badge">#Geral</a> <a href="#" class="badge">#HappyHour</a></p>
+								<div class="item item-divider">
+									<p><a href="#">10 curtidas</a> <a href="#">8 comentários</a></p>
+								</div>
+								<div class="item item-divider">
+									<button class="button button-small button-clear icon ion-thumbsup"> Curtir</button>
+									<button class="button button-small button-clear icon ion-chatbox"> Comentar</button>
+								</div>
+							</div>
+							<div class="col thumbnail text-center">
+								<h3>Camisa verde</h3>
+								<img src="http://www.palaciodotransfer.com.br/media/catalog/product/cache/1/image/840x668/17f82f742ffe127f42dca9de82fb58b1/v/e/verde_lim_o.jpg" />
+								<p>Blablablabla</p>
+								<p><a href="#" class="badge">#Geral</a> <a href="#" class="badge">#HappyHour</a></p>
+								<div class="item item-divider">
+									<p><a href="#">10 curtidas</a> <a href="#">8 comentários</a></p>
+								</div>
+								<div class="item item-divider">
+									<button class="button button-small button-clear icon ion-thumbsup"> Curtir</button>
+									<button class="button button-small button-clear icon ion-chatbox"> Comentar</button>
+								</div>
+							</div>
+							<div class="col thumbnail text-center">
+								<h3>Camisa verde</h3>
+								<img src="http://www.palaciodotransfer.com.br/media/catalog/product/cache/1/image/840x668/17f82f742ffe127f42dca9de82fb58b1/v/e/verde_lim_o.jpg" />
+								<p>Blablablabla</p>
+								<p><a href="#" class="badge">#Geral</a> <a href="#" class="badge">#HappyHour</a></p>
+								<div class="item item-divider">
+									<p><a href="#">10 curtidas</a> <a href="#">8 comentários</a></p>
+								</div>
+								<div class="item item-divider">
+									<button class="button button-small button-clear icon ion-thumbsup"> Curtir</button>
+									<button class="button button-small button-clear icon ion-chatbox"> Comentar</button>
+								</div>
+							</div>
+						</div>
+					</ion-content>
+				</ion-view>
+			</ion-side-menu-content>
+		</ion-side-menus>
+		<script src="lib/bootstrap/js/bootstrap.js"></script>
+	</body>
+</html>

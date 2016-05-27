@@ -1,0 +1,146 @@
+<div class="modal" ng-controller="AddQuestionModalController">
+	<ion-view ng-show="page == 0">
+		<ion-header-bar>
+			<h1 class="title">Adicionar pergunta</h1>
+		</ion-header-bar>
+		<ion-content>
+			<div class="list">
+				<form name="addQuestionForm" role="form">
+					<p class="alert alert-danger" ng-show="errors.unknown">Um erro ocorreu. Tente novamente.</p>
+					<label class="item item-input" ng-class="{ 'has-error' : errors.title }">
+						<span class="input-label">Título da pergunta</span>
+						<input type="text" ng-model="question.title" required maxlength="20">
+					</label>
+					<p ng-show="errors.title" class="form-error">Titulo é obrigatório.</p>
+					<label class="item item-input">
+						<span class="input-label">Descrição</span>
+						<input mentio
+							   	ng-model="question.description"
+								mentio-id="'question.description' + myIndexValue"
+								type="text"
+								ng-trim="false"
+								size="100"/>
+						<mentio-menu
+								mentio-for="'question.description' + myIndexValue"
+								mentio-trigger-char="'@'"
+								mentio-items="users"
+								mentio-template-url="/users-mentions.tpl"
+								mentio-search="searchUser(term)"
+								mentio-select="getUserTextRaw(item)"></mentio-menu>
+
+						<!--<input type="text" ng-model="question.description" maxlength="500">-->
+					</label>
+					<label class="item">
+						<span class="input-label">Tipo de pergunta</span>
+						<ion-list>
+							<ion-radio ng-model="question.type" ng-value="'open'">Aberta</ion-radio>
+							<ion-radio ng-model="question.type" ng-value="'pool'" checked>Votação</ion-radio>
+						</ion-list>
+					</label>
+					<label class="item">
+						<span class="input-label">Itens</span>
+						<button class="icon icon-left ion-plus button button-positive button-full" ng-click="goItem()">Adicionar</button> 
+						<div class="list card" ng-hide="isEmpty(itemsPreview)">
+							<div ng-repeat="item in itemsPreview" class="item item-avatar">
+								<img src="/api/items/{{item._id}}/photo" onError="this.src='img/shirt.png';" />
+								<h2>{{item.name}}</h2>
+								<p>{{item.description}}</p>
+							</div>
+						</div>
+					</label>
+					<p ng-show="errors.wardrobe_items" class="form-error">Você deve anexar entre um e cinco itens.</p>
+					<label class="item item-input item-select">
+						<span class="input-label">Canal</span>
+						<select ng-model="question.channels">
+							<option value="general">#Geral</option>
+							<option value="friends">#Amigos</option>
+							<option value="private">#Privado</option>
+						</select>
+					</label>
+					<label class="item item-input" ng-show="question.channels == 'private'">
+						<span class="input-label">Login do destinatário</span>
+						<input type="text" ng-model="question.target" />
+					</label>
+					<p class="form-error" ng-show="errors.coins">Você não tem moedas suficientes.</p>
+					<button class="button button-clear" ng-click="closeModal()">Cancelar</button>
+					<a type="submit" class="button button-clear button-balanced pull-right" ng-click="createQuestion()">Adicionar</a>
+				</form>
+			</div>
+		</ion-content>
+	</ion-view>
+	<ion-view ng-show="page == 1">
+		<ion-header-bar>
+			<h1 class="title">Adicionar item</h1>
+		</ion-header-bar>
+		<div class="bar bar-subheader item-input-inset list-full">
+			<div class="list list-inset list-full">
+				<label class="item item-input">
+					<i class="icon ion-search placeholder-icon"></i>
+					<input type="text" placeholder="Pesquisar" ng-model="search.name">
+				</label>
+			</div>
+		</div>
+		<ion-content class="has-subheader">
+			<button class="button button-positive button-clear button-full" ng-click="goItemCreation()"><i class="ion-plus-round"></i> Criar item</button>
+			<ion-list>
+				<ion-checkbox ng-repeat="item in items | filter: search.name" class="item-thumbnail-left item-checkbox-right" ng-click="addItem($event, item)">
+					<img ng-src="/api/items/{{item._id}}/photo" onError="this.src='img/shirt.png';">
+					<h2>{{item.name}}</h2>
+					<p>{{item.description}}</p>
+				</ion-checkbox>
+			</ion-list>
+		</ion-content>
+		<div class="bar bar-footer" style="width: 100%; margin-top: 0; padding-top: 0;">
+			<button class="button button-full button-positive" ng-click="backItem()">Concluir</button>
+		</div>
+	</ion-view>
+	<ion-view ng-show="page == 2">
+		<ion-header-bar>
+			<h1 class="title">Criar item</h1>
+		</ion-header-bar>
+		<ion-content>
+			<div class="list">
+				<form id="itemForm">
+					<center>
+						<div ngf-drop ng-model="picFile" ngf-pattern="image/*" class="cropArea" ng-show="dataUrl">
+							<img-crop image="dataUrl" result-image="croppedDataUrl" ng-init="croppedDataUrl=''" area-type="square"></img-crop>
+						</div>
+						<input ngf-select ng-model="picFile" type="file" name="file" accept="image/*" required>
+						<p ng-show="itemErrors.photo" class="form-error">Foto é obrigatória.</p>
+					</center>
+					<label class="item item-input" ng-class="{ 'has-error' : errors.name }">
+						<span class="input-label">Nome</span>
+						<input type="text" ng-model="item.name" required minlength="3" maxlength="16">
+					</label>
+					<p ng-show="itemErrors.name" class="form-error">Nome é obrigatório.</p>
+					<label class="item item-input">
+						<span class="input-label">Descrição</span>
+						<input type="text" ng-model="item.description" maxlength="300">
+					</label>
+					<label class="item item-input item-select">
+						<span class="input-label">Visibilidade</span>
+						<select ng-model="item.visibility">
+							<option value="public">Público</option>
+							<option value="friends">Amigos</option>
+							<option value="private">Privado</option>
+						</select>
+					</label>
+					<input type="submit" class="button button-clear button-balanced pull-right" value="Criar item" ng-click="createItem(croppedDataUrl, picFile.name)">
+					<button class="button button-clear pull-left" ng-click="backItemCreation()">Cancelar</button>
+				</form>
+			</div>
+		</ion-content>
+	</ion-view>
+</div>
+
+<script type="text/ng-template" id="/users-mentions.tpl">
+	<ul class="list-group user-search">
+		<li mentio-menu-item="user" ng-repeat="user in items" class="list-group-item">
+			<img ng-src="/api/users/{{user.login}}/photo" class="user-photo">
+			<span class="text-primary" ng-bind-html="user.login | mentioHighlight:typedTerm:'menu-highlighted' | unsafe"></span>
+			<em class="text-muted" ng-bind="user.name | words:5"></em>
+		</li>
+	</ul>
+</script>
+<script src="../lib/ment.io/dist/mentio.js"></script>
+

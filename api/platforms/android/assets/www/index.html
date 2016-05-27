@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<meta lang="pt-BR">
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Look At Me</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.css">
+		<link rel="stylesheet" href="lib/ionic/css/ionic.css">
+		<link rel="stylesheet" href="css/style.css">
+		<script src="lib/ionic/js/ionic.bundle.js"></script>
+		<script src="js/ng-cordova.min.js"></script>
+		<script src="cordova.js"></script>
+		<script src="js/app.js"></script>
+		<script>
+		if (localStorage.getItem("loggedUser")) {
+			window.location.href = "/main.html";
+		}
+		</script>
+	</head>
+	<body class="platform-android platform-cordova platform-webview">
+		<div class="container">
+			<!-- Logotype -->
+			<div class="row page-header hidden-xs">
+				<img src="img/logo.png" alt="Look At Me" />
+			</div>
+			<div class="row page-header hidden-sm hidden-md hidden-lg">
+				<img src="img/logo-xs.png" alt="Look At Me" />
+			</div>
+			<!-- Login panel -->
+			<div class="row" id="login-panel">
+				<div class="col list">
+					<form method="post" id="login-form">
+						<button class="button button-full button-positive icon-left ion-social-facebook" id="facebook-login">Entrar com Facebook</button>
+						<h4 class="divider"><span>ou</span></h4>
+						<p class="alert alert-danger" style="display: none;"></p>
+						<label class="item item-input">
+							<i class="icon ion-person placeholder-icon"></i>
+							<input type="text" name="login" placeholder="Login" required autofocus />
+						</label>
+						<label class="item item-input">
+							<i class="icon ion-locked placeholder-icon"></i>
+							<input type="password" name="password" placeholder="Senha" required />
+						</label>
+						<button class="button button-full" type="submit" id="login" data-loading-text="Entrando...">Entrar</button>
+						<button class="button button-clear button-balanced" id="create">Criar nova conta</button>
+						<button class="button button-clear button-stable pull-right" id="forgot-password">Esqueci a senha</button>
+					</form>
+				</div><!-- .list -->
+			</div><!-- .row -->
+			<!-- Register panel -->
+			<div class="row" id="register-panel" style="display: none;">
+				<div class="col list">
+					<p class="alert alert-danger" style="display: none;"></p>
+					<form method="post" id="register-form">
+						<label class="item item-input">
+							<input type="text" name="login" placeholder="Login" minlength="3" maxlength="16" required autofocus />
+						</label>
+						<label class="item item-input">
+							<input type="email" name="email" placeholder="E-mail" maxlength="100" required />
+						</label>
+						<label class="item item-input">
+							<input type="password" name="password" placeholder="Senha" minlength="6" maxlength="30" required />
+						</label>
+						<label class="item item-input">
+							<input type="password" name="repeat-password" placeholder="Repetir Senha" minlength="6" maxlength="30" required />
+						</label>
+						<button class="button button-full button-balanced" id="register" type="submit" data-loading-text="Cadastrando...">Cadastrar</button>
+						<button class="button button-clear" id="back">Voltar</button>
+					</form>
+				</div><!-- .list -->
+			</div><!-- .row -->
+		</div><!-- .container -->
+		<script src="lib/bootstrap/js/jquery.js"></script>
+		<script src="lib/bootstrap/js/bootstrap.js"></script>
+		<script src="js/index.js"></script>
+	</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<meta lang="pt-BR">
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Look At Me</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="lib/ionic/css/ionic.css">
+	<link rel="stylesheet" href="lib/ng-img-crop/compile/minified/ng-img-crop.css">
+	<link rel="stylesheet" href="css/style.css">
+	<script src="lib/ionic/js/ionic.bundle.js"></script>
+	<script src="js/ng-cordova.min.js"></script>
+	<script src="cordova.js"></script>
+	<script src="js/app.js"></script>
+	<script src="js/routes.js"></script>
+	<script src="js/controllers.js"></script>
+	<script src="js/base64.js"></script>
+	<script src="lib/ng-img-crop/compile/minified/ng-img-crop.js"></script>
+	<script src="lib/ment.io/dist/mentio.min.js"></script>
+	<script src="services/dateConverter.js"></script>
+	<script src="controllers/module.js"></script>
+	<script src="controllers/sideMenuController.js"></script>
+	<script src="controllers/mainController.js"></script>
+	<script src="controllers/addQuestionModalController.js"></script>
+	<script>
+		if (window.location.search.length > 1 && !localStorage.getItem("loggedUser")) {
+			var parameters = Base64.decode(window.location.search.substr(1));
+			try {
+				var data = JSON.parse(parameters);
+				localStorage.setItem("token", data.token);
+				localStorage.setItem("loggedUser", JSON.stringify(data.user));
+				window.location.href = "/main.html";
+			} catch (err) {
+				window.location.href = "/";
+			}
+		}
+		if (!localStorage.getItem("loggedUser")) {
+			window.location.href = "/";
+		}
+	</script>
+</head>
+<body ng-app="LookAtMe" ng-controller="SideMenuController" ng-cloak>
+	<div ng-controller="MainController">
+		<!-- Navbar -->
+		<div class="tabs tabs-icon-only">
+			<a class="tab-item" ng-class="{ 'active' : panel == 0 }" ng-click="changePanel(0)"><i class="ion-home"></i> ({{questions['friends'].length + questions['private'].length}})</a>
+			<!--<a class="tab-item"><i class="ion-search"></i></a>-->
+			<a class="tab-item" ng-class="{ 'active' : panel == 1 }" ng-click="changePanel(1)"><i class="ion-person-stalker"></i> ({{user.friendship_solicitations.length}})</a>
+			<!--<a class="tab-item"><i class="ion-earth"></i></a>-->
+		</div>
+		<ion-view ng-show="panel == 0">
+			<ion-side-menus>
+				<!-- Left menu -->
+				<div ng-include="'partials/sideMenu.html'"></div>
+				<!-- Main content -->
+				<ion-side-menu-content>
+					<!-- Header -->
+					<ion-header-bar class="bar-positive item-input-inset">
+						<button class="button button-icon icon ion-navicon" menu-toggle="left"></button>
+						<h1 class="title">Look At Me</h1>			
+						<button class="button button-calm" ng-click="openModal()">Criar pergunta</button>
+					</ion-header-bar>
+					<ion-view>
+						<!-- Tabs -->
+						<div class="tabs-striped tabs-top">
+							<div class="tabs">
+								<a ng-repeat="(channel, name) in channels" class="tab-item" ng-class="{ 'active' : channel == currentChannel }" ng-click="changeChannel(channel)">#{{name}} ({{questions[channel].length}})</a>
+								<!--<a class="tab-item"><button class="button">+</button></a>-->
+							</div>
+						</div>
+						<!-- Questions -->
+						<ion-content class="has-subheader">
+							<div class="container" ng-show="error">
+								<p class="alert alert-danger">Um erro ocorreu. Tente novamente.</p>
+							</div>
+							<div class="item" ng-show="questions[currentChannel].length == 0">
+								<p class="alert alert-warning">Não há perguntas neste canal. :(</p>
+							</div>
+							<div class="list card" ng-repeat="question in questions[currentChannel]">
+								<div class="item item-avatar" href="#">
+									<img ng-src="/api/users/{{question.user_login}}/photo" onError="this.src='img/avatar.jpeg';" />
+									<a ng-href="/profile.html?user={{question.user_login}}"><h2>{{question.user_id.name || question.user_login}}</h2></a>
+									<p><i class="ion-clock"></i> {{question.date}}</p>
+								</div>
+								<div class="item item-body">
+									<a ng-href="question.html?id={{question._id}}"><div>
+										<h2>{{question.title}}</h2>
+										<p>{{question.description | limitTo: 100 }} ...</p>
+										<p ng-show="question.user_login == user.login"><button class="icon-left ion-arrow-graph-up-right button button-energized button-small" ng-click="promoteQuestion(question._id)">Promover</button> </p>
+										<!--<a ng-href="#{{item.item._id}}" ng-repeat="item in question.wardrobe_items"><img class="img-thumbnail thumbnail-small" ng-src="/api/items/{{item.item._id}}/photo" onError="this.src='img/shirt.png';" title="{{item.item.name}}" /></a>	-->
+									</div></a>
+								</div>
+								<div class="item item-divider">
+									<p>
+										<a href="question.html?id={{question._id}}#comments"><span class="ion-chatbox"></span> {{question.comments.length}} comentários</a>
+										<span class="pull-right">
+											<a href="#" ng-repeat="channel in question.channels"><span class="">#{{channel}}</span></a> 
+										</span>
+									</p>
+								</div>
+							</div>
+							<hr/><hr/>
+						</ion-content>
+					</ion-view>
+				</ion-side-menu-content>
+			</ion-side-menus>
+		</ion-view>
+		<ion-view ng-show="panel == 1">
+			<ion-side-menus>
+				<!-- Left menu -->
+				<div ng-include="'partials/sideMenu.html'"></div>
+				<!-- Main content -->
+				<ion-side-menu-content>
+					<!-- Header -->
+					<ion-header-bar class="bar-positive item-input-inset">
+						<button class="button button-icon icon ion-navicon" menu-toggle="left"></button>
+						<h1 class="title">Look At Me</h1>			
+						<button class="button button-calm" ng-click="openModal()">Criar pergunta</button>
+					</ion-header-bar>
+					<ion-view>
+						<ion-content>
+							<ul class="list list-inset">
+								<div ng-show="user.friendship_solicitations.length > 0">
+									<div class="item item-divider">Solicitações de amizade</div>
+									<li ng-repeat="(index, solicitation) in user.friendship_solicitations" class="item item-avatar item-button-right">
+										<img ng-src="/api/users/{{solicitation.login}}/photo" onError="this.src='img/avatar.jpeg';" />
+										<h2><a ng-href="/profile.html?user={{solicitation.login}}">{{solicitation.name || solicitation.login}}</a></h2>
+										<p>{{solicitation.bio | limitTo: 50 }}...</p>
+										<div class="buttons">
+											<button class="button button-balanced" ng-click="acceptSolicitation(solicitation, index)"><i class="ion-checkmark"></i></button>
+											<button class="button button-assertive" ng-click="rejectSolicitation(solicitation, index)"><i class="ion-close"></i></button>
+										</div>
+									</li>
+								</div>
+								<div class="item item-divider">Amigos</div>
+								<div class="item item-input">
+									<i class="icon ion-search placeholder-icon"></i>
+									<input type="text" placeholder="Pesquisar" ng-model="searchfriend.name" />
+								</div>
+								<li ng-repeat="(index, friend) in user.friends | filter: searchfriend" class="item item-avatar item-button-right">
+									<img ng-src="/api/users/{{friend.login}}/photo" onError="this.src='img/avatar.jpeg';" />
+									<h2><a ng-href="/profile.html?user={{friend.login}}">{{friend.name || friend.login}}</a></h2>
+									<p>{{friend.bio | limitTo: 50 }}...</p>
+									<button class="button button-assertive" ng-click="unfriend(friend, index)"><i class="ion-close"></i></button>
+								</li>
+								<div class="item" ng-show="user.friends.length == 0">
+									<p class="alert alert-warning">Não há amigos para mostrar. :(</p>
+								</div>
+							</ul>
+						</ion-content>
+					</ion-view>
+				</ion-side-menu-content>
+			</ion-side-menus>
+		</ion-view>
+	</div>
+	<script src="lib/bootstrap/js/jquery.js"></script>
+	<script src="lib/bootstrap/js/bootstrap.js"></script>
+	<script src="services/fileUpload.js"></script>
+	<script src="https://angular-file-upload.appspot.com/js/ng-file-upload-shim.js"></script>
+	<script src="https://angular-file-upload.appspot.com/js/ng-file-upload.js"></script>
+</body>
+</html>

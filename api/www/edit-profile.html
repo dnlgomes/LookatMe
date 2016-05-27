@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<meta lang="pt-BR">
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Look At Me</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="lib/ionic/css/ionic.css">
+    <link rel="stylesheet" href="lib/ng-img-crop/compile/minified/ng-img-crop.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <script src="js/ng-cordova.min.js"></script>
+    <script src="cordova.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/routes.js"></script>
+    <script src="js/controllers.js"></script>
+    <script src="lib/ng-img-crop/compile/minified/ng-img-crop.js"></script>
+	<script src="lib/ment.io/dist/mentio.min.js"></script>
+	<script src="services/dateConverter.js"></script>
+    <script src="controllers/module.js"></script>
+    <script src="controllers/sideMenuController.js"></script>
+    <script src="controllers/editProfileController.js"></script>
+    <script>
+        if (!localStorage.getItem("loggedUser")) {
+            window.location.href = "/";
+        }
+    </script>
+</head>
+<body ng-app="LookAtMe" ng-controller="SideMenuController" ng-cloak>
+	<ion-side-menus>
+		<!-- Left menu -->
+		<div ng-include="'partials/sideMenu.html'"></div>
+		<!-- Main content -->
+		<ion-side-menu-content ng-controller="EditProfileController">
+			<ion-view>
+				<!-- Navbar -->
+				<ion-header-bar class="bar-positive item-input-inset">
+					<button class="button button-icon icon ion-navicon" menu-toggle="left"></button>
+					<h1 class="title">Editar perfil</h1>
+				</ion-header-bar>
+				<!-- Content -->
+				<ion-content overflow-scroll="true" padding="true" class="has-header">
+					<center>
+						<div ngf-drop ng-model="picFile" ngf-pattern="image/*" class="cropArea" ng-show="dataUrl">
+							<img-crop image="dataUrl" result-image="croppedDataUrl" ng-init="croppedDataUrl=''"></img-crop>
+						</div>
+						<img class="img-circle img-profile" ng-src="/api/users/{{user.login}}/photo" onError="this.src='img/avatar.jpeg';" ng-hide="dataUrl" />
+						<input ngf-select ng-model="picFile" type="file" name="file" accept="image/*" required>
+						<p ng-show="form.errors.photo" class="form-error">Erro ao enviar arquivo.</p>
+					</center>
+					<form class="list" id="form">
+						<div class="list card">
+							<p class="alert alert-success" ng-show="form.success">Usuário alterado com sucesso.</p>
+							<p class="alert alert-danger" ng-show="form.errors.unknown">Um erro ocorreu. Tente novamente.</p>
+							<div class="item item-divider">Bio</div>
+							<div class="item item-body">
+								<div class="list">
+									<label class="item item-input">
+										<input type="text" name="bio" placeholder="Uma descrição legal..." ng-value="user.bio">
+									</label>
+								</div>
+							</div>
+							<label class="item item-input" ng-class="{ 'has-error' : form.errors.name }">
+								<span class="input-label">Nome</span>
+								<input type="text" name="name" placeholder="Seu nome" minlength="3" maxlength="30" ng-value="user.name">
+							</label>
+							<p ng-show="form.errors.name" class="form-error">Nome inválido.</p>
+							<label class="item item-input" ng-class="{ 'has-error' : form.errors.email }">
+								<span class="input-label">Email</span>
+								<input type="email" name="email" placeholder="email@exemplo.com" required ng-value="user.email">
+							</label>
+							<p ng-show="form.errors.email" class="form-error">E-mail inválido.</p>
+							<div ng-hide="user.facebook_id">
+								<label class="item item-input" ng-class="{ 'has-error' : form.errors.password }">
+									<span class="input-label">Nova Senha</span>
+									<input type="password" name="newPassword" placeholder="Nova Senha" minlength="6">
+								</label>
+								<p ng-show="form.errors.password" class="form-error">Senha inválida.</p>
+								<label class="item item-input" ng-class="{ 'has-error' : form.errors.confirmPassword }">
+									<span class="input-label">Confirmar nova senha</span>
+									<input type="password" name="confirmNewPassword" placeholder="Nova senha" minlength="6">
+								</label>
+								<p ng-show="form.errors.confirmPassword" class="form-error">Senhas não coincidem.</p>
+								<label class="item item-input" ng-class="{ 'has-error' : form.errors.message }">
+									<span class="input-label">Senha atual</span>
+									<input type="password" name="password" placeholder="Senha">
+								</label>
+								<p ng-show="form.errors.message" class="form-error">Senha não coincide.</p>
+							</div>
+						</div>
+					</form>
+					<button ng-click="submit(croppedDataUrl, picFile.name)" class="button button-assertive button-block" data-loading-text="Salvando..." id="save">Salvar alterações</button>
+				</ion-content>
+			</ion-view>
+		</ion-side-menu-content>
+	</ion-side-menus>
+	<script src="services/fileUpload.js"></script>
+	<script src="https://angular-file-upload.appspot.com/js/ng-file-upload-shim.js"></script>
+	<script src="https://angular-file-upload.appspot.com/js/ng-file-upload.js"></script>
+	<script src="lib/bootstrap/js/jquery.js"></script>
+	<script src="lib/bootstrap/js/bootstrap.js"></script>
+</body>
+</html>
+

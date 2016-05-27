@@ -1,0 +1,72 @@
+/* Empty. Add your own CSS if you like */
+body {
+	background-color: #eee;
+}
+nav img {
+	height: 25px;
+}
+.page-header img {
+	display: block;
+	margin: 10px;
+	margin-left: auto;
+	margin-right: auto;
+}
+.thumb {
+    width: 100px;
+    height: 100px;
+    float: none;
+    position: relative;
+}
+.post-photo {
+	width: 100%;
+}
+.post-username {
+	display: block;
+	text-align: center;
+}
+.avatar {
+	width:150px;
+	height:150px;
+	margin: 25px auto;
+	overflow: hidden;
+	border-radius:50%;
+	position: relative;
+}
+.avatar img {
+	position: absolute;
+	top:50%;
+	left:50%;
+	transform: translate(-50%,-50%)
+}
+.pull-right {
+	float: right;
+}
+.divider {
+	position: relative;
+	text-align: center;
+}
+.divider span {
+    display: inline-block;
+    padding: 0 10px;
+    background: #eee;
+    color: gray;
+}
+.divider:before {
+    content: "";
+    display: block;
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    background: #ccc;
+}
+.vertical-divider {
+     border-left:1px solid #38546d; 
+     border-right:1px solid #16222c; 
+     height:80px;
+     position:absolute;
+     right:249px;
+     top:10px; 
+}

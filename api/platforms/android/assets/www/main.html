@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<meta lang="pt-BR">
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Look At Me</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.css">
+		<link rel="stylesheet" href="lib/ionic/css/ionic.css">
+		<link rel="stylesheet" href="css/style.css">
+		<script src="lib/ionic/js/ionic.bundle.js"></script>
+		<script src="js/app.js"></script>
+		<script src="js/routes.js"></script>
+		<script src="js/controllers.js"></script>
+		<script src="controllers/sideMenuController.js"></script>
+		<script src="cordova.js"></script>
+		<script>
+		if (!localStorage.getItem("loggedUser")) {
+			window.location.href = "/";
+		}
+		</script>
+	</head>
+	<body ng-app="starter" >
+		<ion-side-menus>
+			<!-- Left menu -->
+			<div ng-include="'partials/sideMenu.html'"></div>
+			<!-- Main content -->
+			<ion-side-menu-content>
+				<ion-view>
+					<!-- Navbar -->
+					<ion-header-bar class="bar-positive item-input-inset">
+						<button class="button button-icon icon ion-navicon" menu-toggle="left"></button>
+						<h1 class="title">Look At Me</h1>
+						<button class="button button-balanced">Criar pergunta</button>
+					</ion-header-bar>
+					<!-- Tabs -->
+					<div class="tabs-striped tabs-top">
+						<div class="tabs">
+							<a class="tab-item active">#Geral</a>
+							<a class="tab-item">#Amigos</a>
+							<a class="tab-item">#Privado</a>
+							<a class="tab-item"><button class="button">+</button></a>
+						</div>
+					</div>
+					<div class="tabs tabs-icon-only">
+						<a class="tab-item active"><i class="ion-home"></i></a>
+						<a class="tab-item"><i class="ion-search"></i></a>
+						<a class="tab-item"><i class="ion-person-stalker"></i></a>
+						<a class="tab-item"><i class="ion-earth"></i></a>
+					</div>
+					<!-- Questions -->
+					<ion-content class="has-subheader">
+						<div class="list card">
+							<div class="item item-avatar" href="#">
+								<img src="img/avatar.jpeg" />
+								<a href="#"><h2>user123</h2></a>
+								<p>Um minuto atrás</p>
+							</div>
+							<div class="item item-body">
+								<a href="#"><h2>Me ajudem a decidir com que roupa devo sair</h2></a>
+								<p>Estou em dúvida entre essas duas roupas. Por favor, me ajudem!</p>
+							</div>
+							<div class="item item-divider">
+								<p>
+									<a href="#"><span class="ion-chatbox"></span> 8 comentários</a>
+									<span class="pull-right">
+										<a href="#"><span class="">#Geral</span></a> 
+										<a href="#"><span class="">#HappyHour</span></a>
+									</span>
+								</p>
+							</div>
+						</div>
+						<div class="list card">
+							<div class="item item-avatar" href="#">
+								<img src="img/avatar.jpeg" />
+								<a href="#"><h2>user123</h2></a>
+								<p>Um minuto atrás</p>
+							</div>
+							<div class="item item-body">
+								<a href="#"><h2>Me ajudem a decidir com que roupa devo sair</h2></a>
+								<p>Estou em dúvida entre essas duas roupas. Por favor, me ajudem!</p>
+							</div>
+							<div class="item item-divider">
+								<p>
+									<a href="#"><span class="ion-chatbox"></span> 8 comentários</a>
+									<span class="pull-right">
+										<a href="#"><span class="">#Geral</span></a> 
+										<a href="#"><span class="">#HappyHour</span></a>
+									</span>
+								</p>
+							</div>
+						</div>
+						<div class="list card">
+							<div class="item item-avatar" href="#">
+								<img src="img/avatar.jpeg" />
+								<a href="#"><h2>user123</h2></a>
+								<p>Um minuto atrás</p>
+							</div>
+							<div class="item item-body">
+								<a href="#"><h2>Me ajudem a decidir com que roupa devo sair</h2></a>
+								<p>Estou em dúvida entre essas duas roupas. Por favor, me ajudem!</p>
+							</div>
+							<div class="item item-divider">
+								<p>
+									<a href="#"><span class="ion-chatbox"></span> 8 comentários</a>
+									<span class="pull-right">
+										<a href="#"><span class="">#Geral</span></a> 
+										<a href="#"><span class="">#HappyHour</span></a>
+									</span>
+								</p>
+							</div>
+						</div>
+					</ion-content>
+				</ion-view>
+			</ion-side-menu-content>
+		</ion-side-menus>
+		<script src="lib/bootstrap/js/bootstrap.js"></script>
+	</body>
+</html>

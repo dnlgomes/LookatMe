@@ -1,0 +1,160 @@
+body {
+	background-color: #eee;
+}
+
+nav img {
+	height: 25px;
+}
+
+.page-header img {
+	display: block;
+	margin: 10px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.container {
+	padding: 20px;
+}
+
+.thumb {
+    width: 100px;
+    height: 100px;
+    float: none;
+    position: relative;
+}
+
+.post-photo {
+	width: 100%;
+}
+
+.post-username {
+	display: block;
+	text-align: center;
+}
+
+.avatar {
+	width:150px;
+	height:150px;
+	margin: 25px auto;
+	overflow: hidden;
+	border-radius:50%;
+	position: relative;
+}
+.avatar img {
+	position: absolute;
+	top:50%;
+	left:50%;
+	transform: translate(-50%,-50%)
+}
+.pull-right {
+	float: right;
+}
+.divider {
+	position: relative;
+	text-align: center;
+}
+.divider span {
+    display: inline-block;
+    padding: 0 10px;
+    background: #eee;
+    color: gray;
+}
+.divider:before {
+    content: "";
+    display: block;
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    background: #ccc;
+}
+.vertical-divider {
+     border-left:1px solid #38546d; 
+     border-right:1px solid #16222c; 
+     height:80px;
+     position:absolute;
+     right:249px;
+     top:10px; 
+}
+.img-thumbnail {
+	width: 140px !important; 
+	height: 140px !important;
+}
+.thumbnail-small {
+	width: 100px !important;
+	height: 100px !important;
+}
+.wardrobe-item {
+	padding: 10px;
+}
+.badge:hover {
+	color: lightblue !important;
+}
+
+/** Styling for the username field **/
+label.item.has-error {  
+  border-bottom: 2px solid red;
+}
+
+/** Styling for the password field when an error exists**/
+label.item.has-error-lr {  
+  border-left: 2px solid red;
+  border-right: 2px solid red;
+}
+
+/** Styling for the password field when an error has been resolved**/
+label.item.valid-lr {  
+  border-left: 2px solid green;
+  border-right: 2px solid green;
+}
+/** Styling for the error text and container **/
+.form-errors {
+	margin: 5px 0
+}
+.form-error {
+	padding: 2px 0 2px 16px;
+	color: red;
+}
+.img-profile {
+	width: 200px;
+	height: 200px;
+}
+.cropArea {
+	overflow: hidden;
+	width: 200px;
+	height: 200px;
+}
+.list-full {
+	margin: 0; 
+	padding: 0; 
+	width: 100%;
+}
+
+.user-search .list-group-item.active .text-muted {
+	color: #ccc;
+}
+
+.user-search .list-group-item.active .text-primary {
+	color: #fff;
+}
+
+.user-search .list-group-item {
+	padding: 5px;
+}
+
+.user-search .user-photo {
+	max-width: 30px;
+	max-height: 30px;
+	border-radius: 15px;
+}
+
+.favorite-active {
+	background-color: #FFFF7A	;
+}
+
+.yellow-star {
+	color: gold;
+}

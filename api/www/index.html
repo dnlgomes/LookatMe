@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<meta lang="pt-BR">
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Look At Me</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="lib/ionic/css/ionic.css">
+	<link rel="stylesheet" href="css/style.css">
+	<script src="lib/ionic/js/ionic.bundle.js"></script>
+	<script src="js/ng-cordova.min.js"></script>
+	<script src="cordova.js"></script>
+	<script src="js/app.js"></script>
+	<script src="js/routes.js"></script>
+	<script src="js/controllers.js"></script>
+	<script src="controllers/authController.js"></script>
+	<script>
+		if (localStorage.getItem("loggedUser")) {
+			window.location.href = "/main.html";
+		}
+	</script>
+</head>
+<body ng-app="auth" ng-controller="AuthController" ng-cloak>
+	<div class="container">
+		<!-- Logotype -->
+		<div class="row page-header hidden-xs">
+			<img src="img/logo.png" alt="Look At Me" />
+		</div>
+		<div class="row page-header hidden-sm hidden-md hidden-lg">
+			<img src="img/logo-xs.png" alt="Look At Me" />
+		</div>
+		<!-- Login panel -->
+		<div class="row" id="login-panel">
+			<div class="col list">
+				<form method="post" ng-submit="login()">
+					<a class="button button-full button-positive icon-left ion-social-facebook" id="facebook-login" href="/api/users/login/facebook">Entrar com Facebook</a>
+					<h4 class="divider"><span>ou</span></h4>
+					<p class="alert alert-danger" ng-show="errors.unknown">{{ errors.unknown }}</p>
+					<label class="item item-input">
+						<i class="icon ion-person placeholder-icon"></i>
+						<input type="text" name="login" placeholder="Login" required autofocus ng-model="user.login" />
+					</label>
+					<label class="item item-input">
+						<i class="icon ion-locked placeholder-icon"></i>
+						<input type="password" name="password" placeholder="Senha" required ng-model="user.password" />
+					</label>
+					<button class="button button-full" type="submit" data-loading-text="Entrando..." id="login">Entrar</button>
+					<a class="button button-clear button-balanced" ng-click="go()">Criar nova conta</a>
+					<!--<a class="button button-clear button-stable pull-right">Esqueci a senha</a>-->
+				</form>
+			</div><!-- .list -->
+		</div><!-- .row -->
+		<!-- Register panel -->
+		<div class="row" id="register-panel" style="display: none;">
+			<div class="col list">
+				<p class="alert alert-danger" ng-show="errors.unknown">{{ errors.unknown }}</p>
+				<form method="post" ng-submit="signup()">
+					<label class="item item-input" ng-class="{ 'has-error' : errors.login }">
+						<input type="text" name="login" placeholder="Login" minlength="3" maxlength="16" autofocus ng-model="newUser.login" />
+					</label>
+					<p ng-show="errors.login" class="form-error">{{ errors.login }}</p>
+					<label class="item item-input" ng-class="{ 'has-error' : errors.email }">
+						<input type="email" name="email" placeholder="E-mail" maxlength="100" ng-model="newUser.email" />
+					</label>
+					<p ng-show="errors.email" class="form-error">{{ errors.email }}</p>
+					<label class="item item-input" ng-class="{ 'has-error' : errors.password }">
+						<input type="password" name="password" placeholder="Senha" minlength="6" maxlength="30" ng-model="newUser.password" />
+					</label>
+					<p ng-show="errors.password" class="form-error">{{ errors.password }}</p>
+					<label class="item item-input" ng-class="{ 'has-error' : errors.confirmPassword }">
+						<input type="password" name="repeat-password" placeholder="Repetir Senha" minlength="6" maxlength="30" ng-model="newUser.confirmPassword" />
+					</label>
+					<p ng-show="errors.confirmPassword" class="form-error">{{ errors.confirmPassword }}</p>
+					<button class="button button-full button-balanced" type="submit" data-loading-text="Cadastrando..." id="register">Cadastrar</button>
+					<a class="button button-clear" ng-click="back()">Voltar</a>
+				</form>
+			</div><!-- .list -->
+		</div><!-- .row -->
+	</div><!-- .container -->
+	<script src="lib/bootstrap/js/jquery.js"></script>
+	<script src="lib/bootstrap/js/bootstrap.js"></script>
+</body>
+</html>

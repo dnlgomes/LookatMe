@@ -1,0 +1,25 @@
+<ion-side-menu side="left">
+	<div class="item item-avatar">
+		<img ng-src="{{pic}}" onError="this.src='img/avatar.jpeg';" />
+		<h2>{{user.name}}</h2>
+		<a ng-href="profile.html?user={{user.login}}"><p>@{{user.login}}</p></a>
+	</div>
+	<div class="item">
+		<div class="text-center">
+			<!--<span class="ion-bag" style="color: gold"></span> {{user.wallet.golden_coins}}-->
+			<span class="ion-bag" style="color: silver"></span> {{user.wallet.silver_coins}}
+			<span class="ion-bag" style="color: brown"></span> {{user.wallet.bronze_coins}}
+		</div>
+	</div>
+	<div class="item">
+		<div class="text-center">
+			<p>Reputação: {{user.reputation}}</p>
+			<span class="ion-star" ng-repeat="i in [1, 2, 3, 4, 5]" ng-class="{'yellow-star': user.reputation >= 50 * i }"> </span>
+		</div>
+	</div>
+	<button class="button button-full" onclick="window.location.href='main.html';">Home</button>
+	<button class="button button-full" onclick="window.location.href='edit-profile.html';">Editar perfil</button>
+	<button class="button button-full" onclick="window.location.href='wardrobe.html';">Ver guarda-roupa</button>
+	<!--<button class="button button-full" onclick="window.location.href='config.html';">Configurações</button>-->
+	<button class="button button-full" ng-click="logout()">Sair</button>
+</ion-side-menu>

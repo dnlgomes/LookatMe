@@ -1,0 +1,38 @@
+<div class="modal" ng-controller="ItemController">
+	<ion-content>
+		<div class="item item-avatar">
+			<div class="row">
+				<div class="col">
+					<center>
+						<img class="img-circle img-profile" ng-show="!picFile" ng-src="/api/items/{{current_item._id}}/photo" onError="this.src='img/shirt.png';"/>
+						<h2>{{current_item.name}}</h2>
+						<p>{{current_item.description}}</p>
+					</center>
+				</div>
+			</div>
+		</div>
+		<div class="item item-divider">
+			<center>
+				<button ng-click="like(current_item)" ng-hide="current_item.has_liked" class="button button-clear button-balanced ion-thumbsup"> Curtir ({{current_item.num_likes}})</button>
+				<button ng-click="unlike(current_item)" ng-show="current_item.has_liked" class="button button-clear button-assertive ion-thumbsdown"> Descurtir ({{current_item.num_likes}})</button>
+				<button class="button button-clear button-positive ion-chatbox"> Comentar ({{current_item.num_comments}})</button>
+			</center>
+		</div>
+		<div class="list" id="comments"> 
+			<p class="alert alert-danger" ng-show="errorComment">Erro ao enviar comentário.</p>
+			<div class="item item-input-inset">
+				<label class="item-input-wrapper">
+					<input type="text" id="comment" placeholder="Novo Comentário..." ng-model="current_item.comment">
+				</label>
+				<button class="button button-small" ng-click="addComment(current_item)">Enviar</button>
+			</div>
+			<div class="item item-avatar item-icon-right" ng-repeat="comment in current_item.comments | orderBy: '-_id'">
+				<img class="col-10" src="/api/users/{{comment.user_id.login}}/photo" onError="this.src='img/avatar.jpeg';">
+				<a ng-href="/profile.html?user={{comment.user_id.login}}"><h2>{{comment.user_id.name || comment.user_id.login}}</h2></a>
+				<p><i class="ion-clock"></i> {{comment.date}}</p>
+				<p>{{comment.comment}}</p>
+			</div>
+		</div>
+		<button class="button button-clear" ng-click="closeItemModal()">Sair</button>
+	</ion-content>
+</div>

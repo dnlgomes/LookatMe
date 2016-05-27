@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<meta lang="pt-BR">
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Look At Me</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="lib/ionic/css/ionic.css">
+	<link rel="stylesheet" href="css/style.css">
+	<script src="lib/ionic/js/ionic.bundle.js"></script>
+	<script src="js/ng-cordova.min.js"></script>
+	<script src="cordova.js"></script>
+	<script src="js/app.js"></script>
+	<script src="js/routes.js"></script>
+	<script src="js/controllers.js"></script>
+	<script src="lib/ment.io/dist/mentio.min.js"></script>
+	<script src="lib/ng-img-crop/compile/minified/ng-img-crop.js"></script>
+	<script src="services/dateConverter.js"></script>
+	<script src="controllers/module.js"></script>
+	<script src="controllers/sideMenuController.js"></script>
+	<script src="controllers/profileController.js"></script>
+	<script src="controllers/itemController.js"></script>
+	<script>
+		if (!localStorage.getItem("loggedUser")) {
+			window.location.href = "/";
+		}
+	</script>
+</head>
+<body ng-app="LookAtMe" ng-controller="SideMenuController" ng-cloak>
+	<ion-side-menus>
+		<!-- Left menu -->
+		<div ng-include="'partials/sideMenu.html'"></div>
+		<!-- Main content -->
+		<ion-side-menu-content ng-controller="ProfileController">
+			<ion-view>
+				<!-- Navbar -->
+				<ion-header-bar class="bar-positive item-input-inset">
+					<button class="button button-icon icon ion-navicon" menu-toggle="left"></button>
+					<h1 class="title"><span ng-hide="errors">Perfil de {{profileUser.name || profileUser.login}}</span><span ng-show="errors">Ooopss...</span></h1>
+				</ion-header-bar>
+				<!-- Content -->
+				<ion-content>
+					<div class="container" ng-show="errors">
+						<p class="alert alert-danger">Usuário não encontrado.</p>
+					</div>
+					<div ng-show="!errors" class="list card">
+						<div class="item item-avatar">
+							<div class="row responsive-sm">
+								<div class="col">
+									<center>
+										<img class="img-circle img-profile" ng-show="!picFile" ng-src="/api/users/{{profileUser.login}}/photo" onError="this.src='img/avatar.jpeg';"/>
+										<h2 ng-show="user.name">{{profileUser.name}}</h2>
+										<p>@{{profileUser.login}}</p>
+										<ul class="list-inline ratings" title="Ratings">
+										  <li ng-repeat="i in [1, 2, 3, 4, 5]"><i class="icon ion-star" ng-class="{'yellow-star': user.reputation >= 50 * i }"></i> </li>
+										  <li> ({{profileUser.reputation}}) </li>
+										</ul>
+									</center>
+								</div>
+								<div class="col">
+									<blockquote ng-show="profileUser.bio">
+										{{profileUser.bio}}
+									</blockquote>
+									<div ng-if="profileUser.login != user.login">
+										<a class="button icon-left ion-person-add button-positive button-full" ng-click="sendSolicitation()" ng-show="friendshipStatus == 0">Adicionar como amigo</a>
+										<a class="button icon-left ion-person-add button-assertive button-full" ng-click="dismissSolicitation()" ng-show="friendshipStatus == 1">Cancelar solicitação</a>
+										<a class="button icon-left ion-person-add button-assertive button-full" ng-click="unfriend()" ng-show="friendshipStatus == 2">Desfazer amizade</a>
+										<div ng-show="friendshipStatus == 4">
+											<a class="button icon-left ion-checkmark button-balanced button-full" ng-click="acceptSolicitation()">Aceitar convite de amizade</a>
+											<a class="button icon-left ion-close button-assertive button-full" ng-click="rejectSolicitation()">Rejeitar convite de amizade</a>
+										</div>	
+									</div>
+									<a class="button icon-left ion-edit button-assertive button-full" href="edit-profile.html" ng-if="profileUser.login == user.login">Editar perfil</a>
+									<div class="row">
+										<div class="col">
+											<a class="button icon-left ion-person-stalker button-clear" ng-class="{ 'button-balanced': tab == 0 }" ng-click="changeTab(0)">Amigos</a>
+										</div>
+										<div class="col">
+											<a class="button icon-left ion-tshirt button-clear" ng-class="{ 'button-energized': tab == 1 }" ng-click="changeTab(1)">Guarda-roupa</a>
+										</div>
+									</div>
+									<div ng-show="tab==0">
+										<ion-scroll style="width: 100%; height: 130px;">
+											<div class="list card">
+												<div ng-repeat="friend in friends">
+													<div class="item item-avatar">
+														<img ng-src="/api/users/{{friend.login}}/photo" onError="this.src='img/avatar.jpeg';" />
+														<h2><a ng-href="/profile.html?user={{friend.login}}">{{friend.name || friend.login}}</a></h2>
+													</div>
+												</div>
+												<div ng-show="friends.length == 0">
+													<p class="alert alert-warning">Nenhum amigo para visualizar.</p>
+												</div>
+											</div>
+										</ion-scroll>
+									</div>
+									<div ng-show="tab==1">
+										<ion-scroll style="width: 100%; height: 130px;">
+											<div class="list card" ng-controller="ItemController">
+												<div ng-repeat="item in items">
+													<div class="item item-avatar">
+														<img ng-src="/api/items/{{item._id}}/photo" onError="this.src='img/shirt.png';" />
+														<h2><a href="#" ng-click="openItemModal(item)">{{item.name}}</a></h2>
+														<div class="buttons">
+															<button ng-click="like(item)" ng-hide="item.has_liked" class="button button-clear button-balanced button-small ion-thumbsup"> Curtir ({{item.num_likes}})</button>
+															<button ng-click="unlike(item)" ng-show="item.has_liked" class="button button-clear button-assertive button-small ion-thumbsdown"> Descurtir ({{item.num_likes}})</button>
+															<button ng-click="openItemModal(item)" class="button button-clear button-positive button-small ion-chatbox"> Comentar ({{item.num_comments}})</button>
+														</div>
+													</div>
+												</div>
+												<div ng-show="items.length == 0">
+													<p class="alert alert-warning">Nenhum item para visualizar.</p>
+												</div>
+											</div>
+										</ion-scroll>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div>
+							<ion-list>
+								<div>
+									<ion-item class="item-stable" ng-click="toggleGroup(0)" ng-class="{active: isGroupShown(0)}">
+										<i class="icon" ng-class="isGroupShown(0) ? 'ion-minus' : 'ion-plus'"></i> Perguntas recentes
+									</ion-item>
+									<ion-item class="item-avatar" ng-repeat="question in questions" class="item-accordion" ng-show="isGroupShown(0)">
+										<img onError="this.src='img/avatar.jpeg';" ng-src="/users/{{question.user_login}}/photo" />
+										<a ng-href="/question.html?id={{question._id}}">
+											<h2>{{question.title}}</h2>
+											<p>{{question.description | limitTo: 150}}...</p>
+										</a>
+									</ion-item>
+								</div>
+								<div>
+									<ion-item class="item-stable" ng-click="toggleGroup(1)" ng-class="{active: isGroupShown(1)}">
+										<i class="icon" ng-class="isGroupShown(1) ? 'ion-minus' : 'ion-plus'"></i> Respostas recentes
+									</ion-item>
+									<ion-item class="item-avatar" ng-repeat="answer in answers" class="item-accordion" ng-show="isGroupShown(1)">
+										<img onError="this.src='img/avatar.jpeg';" ng-src="/users/{{answer.question_id.user_login}}/photo" />
+										<a ng-href="/question.html?id={{answer.question_id._id}}">
+											<h2>{{answer.question_id.title}}</h2>
+											<p>Respondeu: "{{answer.comment | limitTo: 150}}..."</p>
+										</a>
+									</ion-item>
+								</div>
+								<div>
+									<ion-item class="item-stable" ng-click="toggleGroup(2)" ng-class="{active: isGroupShown(2)}">
+										<i class="icon" ng-class="isGroupShown(2) ? 'ion-minus' : 'ion-plus'"></i> Respostas favoritadas
+									</ion-item>
+									<ion-item class="item-avatar" ng-repeat="answer in favoritedAnswers" class="item-accordion" ng-show="isGroupShown(2)">
+										<img onError="this.src='img/avatar.jpeg';" ng-src="/users/{{answer.question_id.user_login}}/photo" />
+										<a ng-href="/question.html?id={{answer.question_id._id}}">
+											<h2>{{answer.question_id.title}}</h2>
+											<p>Respondeu: "{{answer.comment | limitTo: 150}}..."</p>
+										</a>
+									</ion-item>
+								</div>
+							</ion-list>
+						</div>
+					</div>
+				</ion-content>
+			</ion-view>
+		</ion-side-menu-content>
+	</ion-side-menus>
+	<script src="services/fileUpload.js"></script>
+	<script src="https://angular-file-upload.appspot.com/js/ng-file-upload-shim.js"></script>
+	<script src="https://angular-file-upload.appspot.com/js/ng-file-upload.js"></script>
+	<script src="lib/bootstrap/js/jquery.js"></script>
+	<script src="lib/bootstrap/js/bootstrap.js"></script>
+</body>
+</html>

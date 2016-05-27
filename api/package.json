@@ -1,0 +1,68 @@
+{
+  "name": "LookAtMeApp",
+  "version": "1.0.0",
+  "description": "A social network for fashion tips.",
+  "keywords": [
+    "lookatme",
+    "fashion",
+    "social network",
+    "tips",
+    "look"
+  ],
+  "contributors": [
+    {
+      "name": "Abner Araujo",
+      "mail": "abner.araujo@ccc.ufcg.edu.br"
+    },
+    {
+      "name": "Danilo Lacerca",
+      "mail": "danilo.lacerda@ccc.ufcg.edu.br"
+    },
+    {
+      "name": "Diego Pedro Silva",
+      "mail": "diego.pedro.silva@ccc.ufcg.edu.br"
+    },
+    {
+      "name": "Gleyser Bonfim Guimarães",
+      "mail": "gleyser.bonfim.guimaraes@ccc.ufcg.edu.br"
+    },
+    {
+      "name": "Vitor Almeida",
+      "mail": "vitor.almeida@ccc.ufcg.edu.br"
+    }
+  ],
+  "engines": {
+    "node": ">= 0.6.0",
+    "npm": ">= 1.0.0"
+  },
+  "dependencies": {
+    "body-parser": "~1.0.1",
+    "express": "~4.0.0",
+    "express-jwt": "^3.1.0",
+    "gulp": "^3.5.6",
+    "gulp-concat": "^2.2.0",
+    "gulp-minify-css": "^0.3.0",
+    "gulp-rename": "^1.2.0",
+    "gulp-sass": "^2.0.4",
+    "jsonwebtoken": "^5.4.0",
+    "ment.io": "^0.9.23",
+    "mongoose": "~3.6.13",
+    "multer": "1.1.0",
+    "passport": "^0.2.0",
+    "passport-facebook": "^1.0.3",
+    "passport-github": "^0.1.5",
+    "passport-google-oauth": "^0.1.5",
+    "passport-linkedin": "^0.1.3",
+    "passport-local": "^1.0.0",
+    "passport-twitter": "^1.0.2",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "bower": "^1.3.3",
+    "gulp-util": "^2.2.14",
+    "shelljs": "^0.3.0"
+  },
+  "bundleDependencies": [],
+  "private": true,
+  "main": "server.js"
+}

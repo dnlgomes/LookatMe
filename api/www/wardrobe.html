@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<meta lang="pt-BR">
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Look At Me</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="lib/ionic/css/ionic.css">
+	<link rel="stylesheet" href="lib/ng-img-crop/compile/minified/ng-img-crop.css">
+	<link rel="stylesheet" href="css/style.css">
+	<script src="lib/ionic/js/ionic.bundle.js"></script>
+	<script src="js/ng-cordova.min.js"></script>
+	<script src="cordova.js"></script>
+	<script src="js/app.js"></script>
+	<script src="js/routes.js"></script>
+	<script src="js/controllers.js"></script>
+	<script src="lib/ng-img-crop/compile/minified/ng-img-crop.js"></script>
+	<script src="lib/ment.io/dist/mentio.min.js"></script>
+	<script src="services/dateConverter.js"></script>
+	<script src="controllers/module.js"></script>
+	<script src="controllers/sideMenuController.js"></script>
+	<script src="controllers/wardrobeController.js"></script>
+	<script src="controllers/itemController.js"></script>
+	<script>
+		if (!localStorage.getItem("loggedUser")) {
+			window.location.href = "/";
+		}
+	</script>
+</head>
+<body ng-app="LookAtMe" ng-controller="SideMenuController" ng-cloak>
+	<ion-side-menus>
+		<!-- Left menu -->
+		<div ng-include="'partials/sideMenu.html'"></div>
+		<!-- Main content -->
+		<ion-side-menu-content ng-controller="WardrobeController">
+			<ion-view>
+				<!-- Navbar -->
+				<ion-header-bar class="bar-positive item-input-inset">
+					<button class="button button-icon icon ion-navicon" menu-toggle="left"></button>
+					<h1 class="title">{{user.name || user.login}}</h1>
+					<button class="button button-calm" ng-click="openModal()">Adicionar item</button>
+				</ion-header-bar>
+				<ion-subheader-bar>
+					<div class="list">
+						<div class="item item-input">
+							<i class="icon ion-search placeholder-icon"></i>
+							<input type="text" placeholder="Pesquisar" ng-model="search.name" />
+						</div>
+					</div>
+				</ion-subheader-bar>
+				<!-- Content -->
+				<ion-content class="has-subheader container">
+					<div ng-hide="items.length">
+						<p>Não há items neste guarda-roupa. <a href="#" ng-click="openModal()">Adicione um</a>.</p>
+					</div>
+					<p class="alert alert-danger" ng-show="error">Um erro ocorreu. Tente novamente.</p>
+					<div ng-show="items.length" ng-repeat="item in items | filter:search" class="col-md-3 col-sm-4 col-xs-6 wardrobe-item" ng-controller="ItemController">
+						<div class="thumbnail text-center">
+							<a href="#" ng-click="openItemModal(item)">
+								<h3>{{item.name}}</h3>
+								<img ng-src="/api/items/{{item._id}}/photo" onError="this.src='img/shirt.png';" width="300" height="300" />
+							</a>
+							<p ng-show="item.description">{{item.description}}</p>
+							<div class="item item-divider">
+								<button ng-click="like(item)" ng-hide="item.has_liked" class="button button-small button-clear icon ion-thumbsup button-balanced"> Curtir ({{item.num_likes}})</button>
+								<button ng-click="unlike(item)" ng-show="item.has_liked" class="button button-small button-clear icon ion-thumbsup button-assertive"> Descurtir ({{item.num_likes}})</button>
+								<button ng-click="openItemModal(item)" class="button button-small button-clear icon ion-chatbox button-positive"> Comentar ({{item.num_comments}})</button>
+							</div>
+						</div>
+					</div>
+				</ion-content>
+			</ion-view>
+		</ion-side-menu-content>
+	</ion-side-menus>
+	<script src="lib/bootstrap/js/jquery.js"></script>
+	<script src="lib/bootstrap/js/bootstrap.js"></script>
+	<script src="services/fileUpload.js"></script>
+	<script src="https://angular-file-upload.appspot.com/js/ng-file-upload-shim.js"></script>
+	<script src="https://angular-file-upload.appspot.com/js/ng-file-upload.js"></script>
+</body>
+</html>
